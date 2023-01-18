@@ -1,13 +1,16 @@
 import { useState } from "react";
+import StarRating from "./StarRating";
 
 const MovieCard = ({
   src,
   title,
   description,
+  rating,
 }: {
   src: string;
   title: string;
   description: string;
+  rating: number;
 }) => {
   const [show, setShow] = useState(false);
   return (
@@ -22,6 +25,7 @@ const MovieCard = ({
           show ? "opacity-70" : "opacity-0"
         }`}
       >
+        <StarRating rating={rating / 2} />
         <h1 className="font-bold mb-4">{title}</h1>
         <p>{description}</p>
       </div>

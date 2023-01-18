@@ -25,9 +25,10 @@ const Feed = () => {
           movies.map((movie, idx) => (
             <Link href={`media/${movie.id}`}>
               <MovieCard
+                key={idx + 1}
                 title={movie.original_title}
                 description={movie.overview}
-                key={idx + 1}
+                rating={movie.vote_average}
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
               />
             </Link>

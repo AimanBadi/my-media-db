@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import StarRating from "@/components/StarRating";
 
 const movie = () => {
   const [movie, setMovie] = useState(null);
@@ -52,12 +53,18 @@ const movie = () => {
             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
           />
           <div>
+            <StarRating rating={movie.vote_average / 2} />
             <h1 className="text-2xl self-start font-bold mb-2">
               {movie.original_title}
             </h1>
             <p className="max-w-lg leading-7">{movie.overview}</p>
           </div>
+          <div className="flex flex-col justify-between gap-4">
+            <h1>Write your thoughts:</h1>
+            <textarea className="resize-none w-full border mb-2"></textarea>
+          </div>
         </div>
+
         <div className="absolute top-5 left-5">
           <FontAwesomeIcon
             icon={faArrowLeft}
