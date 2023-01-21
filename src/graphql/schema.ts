@@ -1,4 +1,4 @@
-import { gql } from "graphql-tag";
+import { gql } from "apollo-server-micro";
 
 export const typeDefs = gql`
   scalar Date
@@ -6,8 +6,9 @@ export const typeDefs = gql`
   type Query {
     "Query to get all notes left on a specific piece of media"
     notesOnMedia(id: ID!): [Note]
-    "Test Query"
-    hello: String!
+    "Query to get popular movies from tmdb api"
+    getPopular: [Media]
+    hello: String
   }
 
   type Mutation {

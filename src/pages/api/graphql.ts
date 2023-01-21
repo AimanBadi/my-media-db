@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "micro-cors";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./auth/[...nextauth]";
+import { TmdbAPI } from "@/graphql/datasources/tmdp-api";
 
 const cors = Cors();
 
@@ -22,6 +23,11 @@ export default cors(async function handler(
   const server = new ApolloServer({
     resolvers,
     typeDefs,
+    dataSources: () => {
+      return {
+        TmdbAPI: new TmdbAPI(),
+      };
+    },
     context: async (req, res) => ({ req, res, user: session?.user }),
   });
 

@@ -26,9 +26,9 @@ const dateScalar = new GraphQLScalarType({
 export const resolvers = {
   Date: dateScalar,
   Query: {
-    hello(_: any, args: any, context: any) {
-      console.log(context);
-      return "World";
+    hello: () => "world",
+    getPopular: (_, __, { dataSources }) => {
+      return dataSources.TmdbAPI.getPopular();
     },
   },
   Mutation: {
