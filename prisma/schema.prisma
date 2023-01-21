@@ -7,26 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Media {
-  id           Int      @id @default(autoincrement())
-  title        String
-  type         String
-  genre        String
-  description  String
-  series       String
-  release_year DateTime
-  rating       Float
-  notes        Notes[]
-}
-
 model Notes {
   id         Int      @id @default(autoincrement())
   userId     String
-  mediaId    Int
+  mediaId    String
+  title      String
   content    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  media      Media    @relation(fields: [mediaId], references: [id])
   user       User     @relation(fields: [userId], references: [id])
 }
 

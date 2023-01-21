@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import MovieCard from "./MovieCard";
+import { gql } from "apollo-server-micro";
+
+const HELLO_QUERY = gql`
+  query Hello {
+    hello
+  }
+`;
 
 const Feed = () => {
   const [movies, setMovies] = useState([]);
