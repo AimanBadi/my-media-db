@@ -1,40 +1,45 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import StarRating from "@/components/StarRating";
+import { StarRating, ReviewForm } from "@/components";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_TV = gql`
+  query GetTVDetail($getTvId: ID!) {
+    getTV(id: $getTvId) {
+      id
+      overview
+      poster
+      rating
+      title
+    }
+  }
+`;
 
 const movie = () => {
-  const [movie, setMovie] = useState(null);
-  const [isLoading, setIsloading] = useState(true);
+  const id = usePathname()?.replace("/tv", "").replace("/", "");
+
+  const { loading, error, data } = useQuery(GET_TV, {
+    variables: { getTvId: id },
+  });
+
   const router = useRouter();
-  const id = usePathname()?.replace("/media", "");
 
   const handleBack = () => {
     router.back();
   };
 
-  useEffect(() => {
-    async function loadData() {
-      if (id !== undefined && id !== "") {
-        const res = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=d8778d01fcb591b12f0f36a05f29b2f3`
-        );
-        const data = await res.json();
-        console.log(data);
-        setMovie(data);
-        setIsloading(false);
-      }
-    }
-    loadData();
-  }, [id]);
+  if (error) {
+    return <div>There was an Error {error.message}</div>;
+  }
 
-  if (isLoading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
+  console.log("hi", data);
   return (
     <motion.div
       initial={{ y: 300, opacity: 0 }}
@@ -50,19 +55,16 @@ const movie = () => {
         <div className="flex flex-col gap-4">
           <img
             className="w-[480px] object-contain"
-            src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            src={`https://image.tmdb.org/t/p/original/${data.getTV.poster}`}
           />
           <div>
-            <StarRating rating={movie.vote_average / 2} />
+            <StarRating rating={data.getTV.rating / 2} />
             <h1 className="text-2xl self-start font-bold mb-2">
-              {movie.original_title}
+              {data.getTV.title}
             </h1>
-            <p className="max-w-lg leading-7">{movie.overview}</p>
+            <p className="max-w-lg leading-7">{data.getTV.overview}</p>
           </div>
-          <div className="flex flex-col justify-between gap-4">
-            <h1>Write your thoughts:</h1>
-            <textarea className="resize-none w-full border mb-2"></textarea>
-          </div>
+          <ReviewForm mediaId={id as string} />
         </div>
 
         <div className="absolute top-5 left-5">

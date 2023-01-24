@@ -10,7 +10,7 @@ const Header = () => {
         {!session ? (
           <>
             <button
-              className="bg-emerald-400 hover:bg-emerald-600 px-4 py-2 rounded-lg text-white font-bold transition"
+              className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg text-white font-bold transition"
               onClick={() => signIn()}
             >
               Log in

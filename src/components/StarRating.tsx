@@ -40,7 +40,7 @@ const StarRating = ({ rating }: { rating: number }) => {
           </svg>
         ))}
 
-        <p className="ml-2 text-sm font-medium text-gray-900 dark:text-white">
+        <p className="ml-2 text-sm font-medium text-gray-900">
           {Math.floor(rating * 10) / 10} out of 5
         </p>
       </div>

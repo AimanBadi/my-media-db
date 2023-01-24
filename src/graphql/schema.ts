@@ -7,16 +7,18 @@ export const typeDefs = gql`
     "Query to get all notes left on a specific piece of media"
     notesOnMedia(id: ID!): [Note]
     "Query to get popular movies from tmdb api"
-    getPopular: [Media]
+    getPopularMovies: [Media]
+    "Query to get popular TV shows from tmdb api"
+    getPopularTV: [Media]
     hello: String
+    "Get details about specific movie"
+    getMovie(id: ID!): Media
+    "Get details about specific TV show"
+    getTV(id: ID!): Media
   }
 
   type Mutation {
-    createNote(
-      userId: ID!
-      mediaId: String!
-      content: String!
-    ): CreateNoteResponse!
+    createNote(mediaId: String!, content: String!): CreateNoteResponse!
   }
 
   type CreateNoteResponse {

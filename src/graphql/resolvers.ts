@@ -8,7 +8,7 @@ const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date custom scalar type",
   serialize(value) {
-    return (value as Date).getTime(); // Convert outgoing Date to integer for JSON
+    return new Date(value as string); // Convert outgoing Date to integer for JSON
   },
   parseValue(value) {
     return new Date(value as number); // Convert incoming integer to Date
@@ -27,25 +27,72 @@ export const resolvers = {
   Date: dateScalar,
   Query: {
     hello: () => "world",
-    getPopular: (_, __, { dataSources }) => {
-      return dataSources.TmdbAPI.getPopular();
+    //@ts-ignore
+    getPopularMovies: (_, __, { dataSources }) => {
+      return dataSources.TmdbAPI.getPopularMovies();
+    },
+    // @ts-ignore
+    getPopularTV: (_, __, { dataSources }) => {
+      return dataSources.TmdbAPI.getPopularTV();
+    },
+    //@ts-ignore
+    getMovie: (_, { id }, { dataSources }) => {
+      return dataSources.TmdbAPI.getMovie(id);
+    },
+    //@ts-ignore
+    getTV: (_, { id }, { dataSources }) => {
+      return dataSources.TmdbAPI.getTV(id);
     },
   },
   Mutation: {
     createNote: async (
       _: any,
       {
-        userId,
         mediaId,
         content,
-      }: { userId: string; mediaId: string; content: string }
+      }: { userId: string; mediaId: string; content: string },
+      { user }
     ) => {
-      // const note = await prisma.notes.create()
-      return {
-        code: 200,
-        success: true,
-        message: `This is a test message, data is: ${userId} ${mediaId} ${content}`,
-      };
+      if (!user) {
+        return {
+          code: 401,
+          success: false,
+          message: "Please log in to save your personel notes",
+        };
+      }
+
+      try {
+        const author = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        const note = await prisma.notes.create({
+          data: {
+            mediaId,
+            title: "this is a test",
+            content,
+            user: {
+              connect: {
+                id: author?.id,
+              },
+            },
+          },
+        });
+        return {
+          code: 200,
+          success: true,
+          message: `Note for ${mediaId} created successfully by ${user.email}`,
+          note,
+        };
+      } catch (err: any) {
+        console.log("here", err.message);
+        return {
+          code: err.extension.response.status,
+          success: false,
+          message: err.extension.response.body,
+          note: null,
+        };
+      }
     },
   },
 };
