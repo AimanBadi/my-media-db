@@ -1,10 +1,10 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Space, Image, Typography, Rate } from "antd";
 import { motion } from "framer-motion";
-import { StarRating, ReviewForm } from "@/components";
 import { gql, useQuery } from "@apollo/client";
+
+const { Title, Text } = Typography;
 
 const GET_MOVIE = gql`
   query getMovieDetails($movieId: ID!) {
@@ -49,8 +49,43 @@ const movie = () => {
         stiffness: 500,
         damping: 50,
       }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+      }}
     >
-      <div className="relative flex flex-col justify-center items-center pt-4">
+      <Space
+        direction="vertical"
+        style={{
+          textAlign: "left",
+          display: "flex",
+          alignItems: "flex-start",
+          maxWidth: "50%",
+        }}
+      >
+        <Space
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
+          }}
+        >
+          <Image
+            width={400}
+            src={`https://image.tmdb.org/t/p/original/${data.getMovie.poster}`}
+          />
+        </Space>
+
+        <Rate
+          disabled
+          defaultValue={Math.floor((data.getMovie.rating / 2) * 10) / 10}
+        />
+        <Title>{data.getMovie.title}</Title>
+        <Text>{data.getMovie.overview}</Text>
+      </Space>
+
+      {/* <div className="relative flex flex-col justify-center items-center pt-4">
         <div className="flex flex-col gap-4">
           <img
             className="w-[480px] object-contain"
@@ -73,7 +108,7 @@ const movie = () => {
             onClick={handleBack}
           />
         </div>
-      </div>
+      </div> */}
     </motion.div>
   );
 };

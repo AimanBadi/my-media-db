@@ -5,24 +5,28 @@ import MediaCard from "./MediaCard";
 
 const Carousel = ({ movies, baseHref }: { movies: any; baseHref: string }) => {
   const [width, setWidth] = useState(0);
-  const carousel = useRef();
+  const carousel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setWidth(carousel.current?.scrollWidth - carousel.current?.offsetWidth);
+    setWidth(carousel.current?.scrollWidth! - carousel.current?.offsetWidth!);
   }, []);
 
   return (
-    <motion.div
-      ref={carousel}
-      className="cursor-grab overflow-hidden max-w-[80rem]"
-    >
+    <motion.div ref={carousel}>
       <motion.div
         drag="x"
         dragConstraints={{ right: 0, left: -width }}
-        className="flex"
+        style={{ display: "flex", cursor: "grab" }}
       >
-        {movies.map((movie, idx) => (
-          <motion.div className="min-h-[20rem] min-w-[20rem] p-[40px]">
+        {movies.map((movie: any, idx: number) => (
+          <motion.div
+            style={{
+              minHeight: "20rem",
+              minWidth: "20rem",
+              padding: "40px",
+              display: "flex",
+            }}
+          >
             <Link href={`${baseHref}/${movie.id}`} key={idx + 1}>
               <MediaCard
                 title={movie.title}

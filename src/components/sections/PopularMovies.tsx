@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { Space } from "antd";
 import { Carousel } from "@/components";
 
 const GET_POPULAR = gql`
@@ -21,10 +22,13 @@ const PopularMovies = () => {
   if (loading) return <h1>loading...</h1>;
   else {
     return (
-      <div className="flex flex-col justify-center items-center text-center gap-8 overflow-hidden">
-        <h1 className="text-4xl font-bold">Popular Movies</h1>
+      <Space
+        direction="vertical"
+        style={{ textAlign: "center", overflow: "hidden", maxWidth: "80%" }}
+      >
+        <h1>Popular Movies</h1>
         <Carousel movies={data.getPopularMovies} baseHref="movie" />
-      </div>
+      </Space>
     );
   }
 };
