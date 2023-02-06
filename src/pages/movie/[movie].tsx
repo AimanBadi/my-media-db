@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Space, Image, Typography, Rate } from "antd";
 import { motion } from "framer-motion";
 import { gql, useQuery } from "@apollo/client";
+import { StarRating } from "@/components";
 
 const { Title, Text } = Typography;
 
@@ -77,10 +78,7 @@ const movie = () => {
           />
         </Space>
 
-        <Rate
-          disabled
-          defaultValue={Math.floor((data.getMovie.rating / 2) * 10) / 10}
-        />
+        <StarRating rating={data.getMovie.rating} disabled={true} />
         <Title>{data.getMovie.title}</Title>
         <Text>{data.getMovie.overview}</Text>
       </Space>
